@@ -1,0 +1,32 @@
+/home/roland/Adams/
+
+Controls_Plant_1
+Controls_Plant_1
+interactive
+discrete
+0.010000
+automatic
+yes 
+NUMBER OF COMMANDS
+0
+NUMBER OF INPUTS/OUTPUTS
+4 13
+INPUT VARIABLES
+AngleBraquageAV 17 1
+AngleBraquageArriere 20 1
+AccelMoteur 14 1
+Stab_function 43 1
+OUTPUT VARIABLES
+PosX 125 1
+PosY 126 1
+PosXAvant 127 1
+PosYAvant 128 1
+MesureVitesse 129 1
+AngleAVG 133 1
+AngleAVD 134 1
+AngleARG 132 1
+AngleARD 135 1
+VitesseRoueARD 130 1
+VitesseRoueARG 136 1
+VitesseLacet 162 1
+roulis 65 1

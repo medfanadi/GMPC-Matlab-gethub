@@ -1,0 +1,100 @@
+function Sortie = braquage3train2(EcLat,EcAng,Courbure,dCourbure,DeltR,DeltA,deltaN1,deltaN2,tPred,deltaH,CoubureH,deltaArr,Vitesse, DeltaEcartAv)
+
+% Qq paramètres:
+% 
+% a1=1.55;
+% a2=-0.63;
+% b1=0.04;
+% b2=0.04;
+a1=1.0086;
+a2=-0.2801;
+b1=0.1642;
+b2=0.1072;
+Cm=[1 0 0];
+G=[a1 0 1]';
+
+
+Fm=[b1 b2 a2; 1 0 0; 0 0 0];
+
+
+Tm=8;
+%Tm=4;
+
+if abs(DeltA)<1*pi/180 & abs(DeltR)<1*pi/180 & Vitesse>3
+    Tm=5;
+else
+    Tm=2;
+end
+kdinter=6/(Vitesse*Tm);
+kd=min(kdinter,0.6);
+%kd=0.1;
+kp=kd^2/4;
+
+Ki=0;
+
+Longueur=1.2;
+angle_mini=-30;
+angle_maxi=30;
+
+
+Theta2=EcAng + DeltR + deltaArr;
+Alpha1=1 - Courbure*EcLat;
+
+for i=1:20*tPred+1
+        a2=0;
+        for j=0:i+1
+            a2 = a2 + [1 0 0]*Fm^(i+1-j)*G;
+            %a2 = a2 + 1;
+        end
+        a(i) = a2;
+end
+%a=[0.982,1.0213,1.0001,1.0009,1,1,1,1,1,1;];
+%a=[0.982,1.02128,1.0001312,1.000856448,1.00003950592,1.0000358381568,1.00000301376307,1.00000155407679,1.00000018271359,1.00000006947162,1.00000001008741,1.00000000318236,1.00000000053079,1.00000000014853,1.00000000002717,1.00000000000703;];
+%a=[0.982,1.0213,1.0001,1.0009,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1;];
+Alpha=-kd*Alpha1*tan(Theta2) - kp*EcLat + Courbure*Alpha1*(tan(Theta2))^2;
+
+
+UH=(Longueur)*(CoubureH)*(cos(0*EcAng + deltaArr))/cos(deltaArr);
+%UH=(Longueur/cos(DeltR+deltaArr))*(CoubureH*cos(Theta2)/(1 - CoubureH*EcLat));
+
+
+U=(Longueur/cos(DeltR+deltaArr))*(Courbure*cos(Theta2)/Alpha1);
+%U2=(Longueur/cos(0*DeltR+deltaArr))*(Courbure*cos(deltaArr));
+
+V=(Longueur/cos(DeltR+deltaArr))*( ...
+        + ((cos(Theta2))^3/(Alpha1)^2)*Alpha )...
+        + tan(DeltR+deltaArr);
+
+% *** atan(u+v)+DeltA =atan(u)+atan( v / ( 1 + u*v + v^2 ) ) + DeltA
+DeltaEcart = atan(V / (1+U*V+U^2) ) + DeltA; %Partie liée aux écarts
+DeltaTrajH = atan(UH) ; %partie prépondérante liée à la Courbure
+
+
+% **** Echantillonage commande 
+DeltaTrajT = atan(U);
+N=20*tPred;
+
+Cm=[1 0 0];
+
+    X=[deltaN1-DeltaEcart deltaN2-DeltaEcartAv deltaH]';
+    
+    [R1 R2]=calculR(N,X,DeltaTrajT,DeltaTrajH,Fm,a,deltaN1);
+    DeltaTraj=R2/R1;
+    
+    
+
+delta= DeltaEcart + DeltaTraj;
+deltaH=DeltaTraj;
+
+
+if delta > angle_maxi *pi/180
+    delta = angle_maxi *pi/180;
+elseif delta < angle_mini *pi/180
+    delta = angle_mini *pi/180;
+end
+
+Sortie(1)=delta;
+Sortie(2)=deltaH;
+
+
+
