@@ -9,7 +9,7 @@ clc;
 
 %% Simulation selon le Type de la trajectoire (rectiligne, ciculaire sinusoidale)
 
-sim('NCGPC_droite',30);
+sim('NCGPC_BoucleOuverte',30);
 
 
 %% Paramètres du robot
