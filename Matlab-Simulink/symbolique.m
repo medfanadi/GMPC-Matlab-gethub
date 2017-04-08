@@ -3,25 +3,31 @@ clear all
 close all
 
 
-syms  psi Vpsi X Vx vit Y Vy psi_ref Vpsi_ref dVpsi_ref X_ref Vx_ref dVx_ref Y_ref Vy_ref dVy_ref real
+syms  psi Vpsi X Vx Y Vy psi_ref Vpsi_ref dVpsi_ref X_ref Vx_ref dVx_ref Y_ref Vy_ref dVy_ref real
 
-syms masse a b d h Cf Cr moment Ts real
+% syms masse a b d h Cf vit Cr moment Ts real
 
-% %rigidité de dérive
-% Cf=10000;
-% Cr=10000;
-% 
-% %position du cdg
-% a=1.2;
-% b=1.2;
-% 
-% Ts=1; vit=6;
-% %masse et momet d'inertie
-% masse=700;
-% moment=400*(1.2^2+0.7^2)/12;
+%rigidité de dérive
+Cf=10000;
+Cr=10000;
+
+%position du cdg
+a=1.2;
+b=1.2;
+
+%masse et momet d'inertie
+masse=700;
+moment=400*(1.2^2+0.7^2)/12;
+
+%vitesse
+vit=5;
+
+% temps de prédiction
+Ts=5 ;
+
 
 a11=-2*(Cf+Cr)/(masse*vit);
-a12=-2*(a*Cf-b*Cr)/(masse*vit)-vit;
+a12=-2*(a*Cf-b*Cr)/(masse*vit)+vit;
 a21=-2*(a*Cf-b*Cr)/(vit*moment);
 a22=-2*(a^2*Cf+b^2*Cr)/(vit*moment);
 
@@ -49,17 +55,23 @@ D=[b21 b22;
    b11*cos(psi) b12*cos(psi)];
 
 %%
+%% matrice de gain
 Ki=[10/(3*Ts^2) 10/(4*Ts) 1];
+
+Ki2=[0.1/(3*Ts^2) 0.1/(4*Ts) 1];
+
 ZE=zeros(1,3);
 
 K= [Ki ZE ZE;
     ZE Ki ZE;
-    ZE ZE 100*Ki];
+    ZE ZE Ki];
+
+%% Angles de brauage
 
 u=simplify(-inv(D'*D)*D'*K*Ep);
 
 
 
 
-betaf=u(1,1)
-betar=u(2,1)
+betaf=simplify(u(1,1))
+betar=simplify(u(2,1))
