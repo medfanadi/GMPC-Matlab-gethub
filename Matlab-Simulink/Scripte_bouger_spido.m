@@ -9,7 +9,7 @@ clc;
 
 %% Simulation selon le Type de la trajectoire (rectiligne, ciculaire sinusoidale)
 
-sim('NCGPC_droite',10);
+sim('NCGPC_droite',20);
 
 
 %% Paramètres du robot
@@ -148,6 +148,6 @@ for i=1:length(beta)
     %% Plot du robot
     set(h2,'XData',PRX,'YData',PRY);
     
-    pause(0.005);
+    pause(0.008);
     
 end

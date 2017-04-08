@@ -3,7 +3,7 @@ clear all
 close all
 
 
-syms  psi Vpsi X Vx Y Vy psi_ref Vpsi_ref dVpsi_ref X_ref Vx_ref dVx_ref Y_ref Vy_ref dVy_ref real
+syms  psi Vpsi X Vx Y Vy psi_ref Vpsi_ref dVpsi_ref X_ref Vx_ref dVx_ref Y_ref Vy_ref dVy_ref vit real
 
 % syms masse a b d h Cf vit Cr moment Ts real
 
@@ -20,19 +20,19 @@ masse=700;
 moment=400*(1.2^2+0.7^2)/12;
 
 %vitesse
-vit=5;
+% vit=5;
 
 % temps de prédiction
 Ts=5 ;
 
 
 a11=-2*(Cf+Cr)/(masse*vit);
-a12=-2*(a*Cf-b*Cr)/(masse*vit)+vit;
-a21=-2*(a*Cf-b*Cr)/(vit*moment);
+a12=2*(a*Cf-b*Cr)/(masse*vit)-vit;
+a21=2*(a*Cf-b*Cr)/(vit*moment);
 a22=-2*(a^2*Cf+b^2*Cr)/(vit*moment);
 
-b11=2*Cf/masse; b12=2*Cr/masse;
-b21=2*a*Cf/moment; b22=-2*b*Cr/moment;
+b11=-2*Cf/masse; b12=2*Cr/masse;
+b21=2*a*Cf/moment; b22=2*b*Cr/moment;
 
 %%
 zetah=Vx*Vpsi+a11*Vy+a12*Vpsi;
@@ -62,8 +62,8 @@ Ki2=[0.1/(3*Ts^2) 0.1/(4*Ts) 1];
 
 ZE=zeros(1,3);
 
-K= [Ki ZE ZE;
-    ZE Ki ZE;
+K= [Ki2 ZE ZE;
+    ZE Ki2 ZE;
     ZE ZE Ki];
 
 %% Angles de brauage
