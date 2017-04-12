@@ -8,8 +8,10 @@ clc;
 
 
 %% Simulation selon le Type de la trajectoire (rectiligne, ciculaire sinusoidale)
+X0=[0 0 0 6 0 0];  %condition initiale cas DROITE
+% X0=[0 0 0 27 27 0]; %condition initiale cas CIRCLE
 
-sim('NCGPC_droite',20);
+sim('NCGPC_circulaire',100);
 
 
 %% Paramètres du robot
