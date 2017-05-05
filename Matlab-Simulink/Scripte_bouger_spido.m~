@@ -8,10 +8,11 @@ clc;
 
 
 %% Simulation selon le Type de la trajectoire (rectiligne, ciculaire sinusoidale)
-X0_rectiligne=[0 0 pi/3*1.1 0.006*cos(pi/3*1.1) 0.012*sin(pi/3*1.1) 0];  %condition initiale cas DROITE
+% X0_rectiligne=[0 0 pi/3*1.2 6*cos(pi/3*1.2) 6*sin(pi/3*1.2) 0];  %condition initiale cas DROITE
+X0_rectiligne=[0 0 pi/3*1.2 6*cos(pi/3*1.2) 6*sin(pi/3*1.2) 0];  %condition initiale cas DROITE
 X0_circulaire=[60 0 0.8*pi/2 0 5 5/60]; %condition initiale cas CIRCLE
 
-sim('NCGPC_droite',500);
+sim('NCGPC_droite',100);
 
 
 %% Paramètres du robot
@@ -174,6 +175,6 @@ for i=1:length(beta)
     %% Plot du robot
     set(h2,'XData',PRX,'YData',PRY);
     
-    pause(0.0000001);
+    pause(0.01);
     
 end
